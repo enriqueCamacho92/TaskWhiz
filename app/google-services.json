@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "743107800536",
+    "project_id": "taskwhiz-52801",
+    "storage_bucket": "taskwhiz-52801.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743107800536:android:e8ad4d531590780cef16ad",
+        "android_client_info": {
+          "package_name": "com.example.taskwhiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmtCCFBoGoDLBzb0xtunuusBbBnqvex9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
