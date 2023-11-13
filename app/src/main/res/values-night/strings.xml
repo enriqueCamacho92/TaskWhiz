@@ -12,4 +12,12 @@
     <string name="ya_tienes_una_cuenta_inicia_sesi_n">¿Ya tienes una cuenta? Inicia Sesión</string>
     <string name="confirmar_contrase_a">Confirmar contraseña</string>
     <string name="reestablecer">Reestablecer</string>
-</resources>
+    <string name="icono_del_men">Icono del menú</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="agregar_tarea">Agregar Tarea</string>
+    <string name="ingrese_su_tarea">Ingrese su tarea</string>
+    <string name="t_tulo_de_la_tarea">Título de la Tarea</string>
+    <string name="descripci_n_detallada_de_la_tarea">Descripción detallada de la tarea...</string>
+    <string name="marcar_como_completada">Marcar como Completada</string>
+    <string name="editar_tarea">Editar Tarea</string>
+ </resources>
