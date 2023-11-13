@@ -1,0 +1,105 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:id="@+id/detailTaskFragment"
+    android:background="@android:color/white">
+
+    <!-- Campo de entrada para el título de la tarea -->
+    <EditText
+        android:id="@+id/taskTitleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Título de la Tarea"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColorHint="#616161" />
+
+    <!-- Campo de entrada para la descripción de la tarea -->
+    <EditText
+        android:id="@+id/taskDescriptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Descripción de la Tarea"
+        android:inputType="textMultiLine"
+        android:minHeight="72dp"
+        android:textColorHint="#616161" />
+
+    <!-- Campo de entrada para la fecha de vencimiento -->
+    <EditText
+        android:id="@+id/taskDueDateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fecha de Vencimiento"
+        android:inputType="date"
+        android:minHeight="48dp"
+        android:textColorHint="#616161"
+        android:focusable="false"/>
+
+    <!-- Selector de prioridad de la tarea -->
+    <RadioGroup
+        android:id="@+id/priorityRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/highPriorityRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Alta"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/mediumPriorityRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Media"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/lowPriorityRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Baja"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <!-- Botón para marcar como completada la tarea -->
+    <Button
+        android:id="@+id/markAsCompletedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#4CAF50"
+        android:text="Marcar como Completada"
+        android:textColor="#263238"
+        android:textSize="16sp" />
+
+    <!-- Botón para guardar la tarea -->
+    <Button
+        android:id="@+id/saveTaskButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="#2196F3"
+        android:text="Actualizar Tarea"
+        android:textColor="#212121"
+        android:textSize="16sp" />
+
+    <!-- Botón para cerrar el fragmento -->
+    <Button
+        android:id="@+id/closeFragmentButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#FF0000"
+        android:text="Cerrar"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+</LinearLayout>

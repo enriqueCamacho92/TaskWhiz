@@ -1,5 +1,6 @@
 package com.example.taskwhiz
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,12 +8,31 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskwhiz.models.Task
 
-class TaskAdapter(private var taskList: List<Task>) : RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
+interface OnTaskClickListener {
+    fun onTaskClick(taskId: String)
+}
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TaskAdapter(
+    private var taskList: List<Task>,
+    private val onTaskClickListener: OnTaskClickListener
+) : RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val taskNameTextView: TextView = itemView.findViewById(R.id.taskNameTextView)
         val taskDescriptionTextView: TextView = itemView.findViewById(R.id.taskDescriptionTextView)
-        // Otros campos según sea necesario
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View?) {
+            val position = adapterPosition
+            Log.d("TaskAdapter", "Item clicked at position $position")
+            if (position != RecyclerView.NO_POSITION) {
+                val task = taskList[position]
+                onTaskClickListener.onTaskClick(task.id)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,7 +45,6 @@ class TaskAdapter(private var taskList: List<Task>) : RecyclerView.Adapter<TaskA
 
         holder.taskNameTextView.text = currentTask.nombre
         holder.taskDescriptionTextView.text = currentTask.descripcion
-        // Configurar otros campos según sea necesario
     }
 
     override fun getItemCount(): Int {

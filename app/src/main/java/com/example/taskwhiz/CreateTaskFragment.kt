@@ -1,6 +1,7 @@
 package com.example.taskwhiz
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
@@ -38,12 +39,33 @@ class CreateTaskFragment : DialogFragment()  {
 
         // Muestra un diálogo de selección de fecha cuando se hace clic en el campo de fecha
         val taskDueDateEditText = view.findViewById<EditText>(R.id.taskDueDateEditText)
-        taskDueDateEditText.setOnClickListener{
-            val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-                // Actualiza el campo de fecha de vencimiento
-                calendar.set(selectedYear, selectedMonth, selectedDay)
-                taskDueDateEditText.setText(formatDate(calendar.time))
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        taskDueDateEditText.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    // Actualiza el campo de fecha de vencimiento
+                    calendar.set(selectedYear, selectedMonth, selectedDay)
+
+                    // Muestra el diálogo de selección de hora después de seleccionar la fecha
+                    TimePickerDialog(
+                        requireContext(),
+                        { _, selectedHour, selectedMinute ->
+                            // Actualiza la hora en el calendario
+                            calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
+                            calendar.set(Calendar.MINUTE, selectedMinute)
+
+                            // Actualiza el campo de fecha y hora en el EditText
+                            taskDueDateEditText.setText(formatDateAndTime(calendar.time))
+                        },
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true // true para el formato de 24 horas
+                    ).show()
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
             datePickerDialog.show()
         }
 
@@ -98,6 +120,11 @@ class CreateTaskFragment : DialogFragment()  {
 
     private fun formatDate(date: Date): String {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return sdf.format(date)
+    }
+
+    private fun formatDateAndTime(date: Date): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         return sdf.format(date)
     }
 

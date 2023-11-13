@@ -18,10 +18,9 @@ import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity(), OnTaskClickListener {
 
     private lateinit var addTaskButton: Button
-
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
 
@@ -36,14 +35,14 @@ class DashboardActivity : AppCompatActivity() {
 
         // Configura la RecyclerView y el Adapter
         val taskRecyclerView: RecyclerView = findViewById(R.id.taskList)
-        val taskAdapter = TaskAdapter(ArrayList()) // Puedes pasar tu lista de tareas aquí
+        val taskAdapter = TaskAdapter(ArrayList(),this) // Puedes pasar tu lista de tareas aquí
         taskRecyclerView.adapter = taskAdapter
         taskRecyclerView.layoutManager = LinearLayoutManager(this)
 
         loadUserNameToToolbar()
 
         // Cargar tareas desde Firebase
-        loadTasksFromFirebase(taskAdapter)
+        loadTasksFromFirebase(taskAdapter, "Pendiente")
 
         // Configura un listener para el botón de agregar tarea
         addTaskButton.setOnClickListener {
@@ -85,46 +84,58 @@ class DashboardActivity : AppCompatActivity() {
         val toolbarTitle = findViewById<TextView>(R.id.tvToolbarTitle)
         toolbarTitle.text = userName ?: getString(R.string.dashboard)
     }
-    private fun loadTasksFromFirebase(adapter: TaskAdapter) {
+
+    private fun loadTasksFromFirebase(adapter: TaskAdapter, estatus: String) {
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
             val userId = currentUser.uid
             val tasksCollection = firestore.collection("usuarios").document(userId).collection("tasks")
 
-            tasksCollection.addSnapshotListener { value, error ->
-                if (error != null) {
-                    // Maneja el error aquí
-                    Log.e(TAG, "Error al obtener las tareas", error)
-                    return@addSnapshotListener
+            tasksCollection
+                .whereEqualTo("estatus", estatus) // Filtra por el campo "estatus"
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        // Maneja el error aquí
+                        Log.e(TAG, "Error al obtener las tareas", error)
+                        return@addSnapshotListener
+                    }
+
+                    val taskList = ArrayList<Task>()
+
+                    for (document in value!!) {
+                        val taskData = document.data
+                        val id = document.id
+                        val nombre = taskData["nombre"] as String
+                        val descripcion = taskData["descripcion"] as String
+                        val creacion = taskData["creacion"] as com.google.firebase.Timestamp
+                        val vencimiento = taskData["vencimiento"] as com.google.firebase.Timestamp
+                        val prioridad = taskData["prioridad"] as Long
+                        val estatus = taskData["estatus"] as String
+
+                        val task = Task(
+                            id,
+                            nombre,
+                            creacion.toDate(),
+                            vencimiento.toDate(),
+                            prioridad.toInt(),
+                            estatus,
+                            descripcion,
+                            userId
+                        )
+                        taskList.add(task)
+                    }
+                    adapter.updateData(taskList)
                 }
-
-                val taskList = ArrayList<Task>()
-
-                for (document in value!!) {
-                    val taskData = document.data
-                    val id = document.id
-                    val nombre = taskData["nombre"] as String
-                    val descripcion = taskData["descripcion"] as String
-                    val creacion = taskData["creacion"] as com.google.firebase.Timestamp
-                    val vencimiento = taskData["vencimiento"] as com.google.firebase.Timestamp
-                    val prioridad = taskData["prioridad"] as Long
-                    val estatus = taskData["estatus"] as String
-
-                    val task = Task(
-                        id,
-                        nombre,
-                        creacion.toDate(),
-                        vencimiento.toDate(),
-                        prioridad.toInt(),
-                        estatus,
-                        descripcion,
-                        userId
-                    )
-                    taskList.add(task)
-                }
-                adapter.updateData(taskList)
-            }
         }
     }
 
+    override fun onTaskClick(taskId: String) {
+        Log.d("OnTaskClickListener", "Task clicked: $taskId")
+        val fragment = DetalleTareaFragment.newInstance(taskId)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
+        Log.d("OnTaskClickListener", "After fragment transaction")
+    }
 }
