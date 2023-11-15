@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".CreateTaskFragment"
-            android:exported="false" />
-        <activity
             android:name=".RestorePasswordActivity"
             android:exported="false" />
         <activity

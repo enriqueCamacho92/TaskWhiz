@@ -23,10 +23,11 @@ class DetalleTareaFragment : DialogFragment() {
     companion object {
         private const val ARG_TASK_ID = "taskId"
 
-        fun newInstance(taskId: String): DetalleTareaFragment {
+        fun newInstance(taskId: String, estatus: String): DetalleTareaFragment {
             val fragment = DetalleTareaFragment()
             val args = Bundle()
             args.putString(ARG_TASK_ID, taskId)
+            args.putString("estatus", estatus)
             fragment.arguments = args
             return fragment
         }
@@ -45,10 +46,20 @@ class DetalleTareaFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val updateTaskButton = view.findViewById<Button>(R.id.saveTaskButton)
+        val markAsCompletedButton = view.findViewById<Button>(R.id.markAsCompletedButton)
         // Obtener el ID de la tarea desde los argumentos
         val taskId = arguments?.getString(ARG_TASK_ID)
+        val estatus = arguments?.getString("estatus")
 
-        val updateTaskButton = view.findViewById<Button>(R.id.saveTaskButton)
+
+
+        if (estatus == "Terminado") {
+            markAsCompletedButton.visibility = View.GONE
+            updateTaskButton.visibility = View.GONE
+        }
+
+
         updateTaskButton.setOnClickListener {
             val newTitle = binding?.taskTitleEditText?.text.toString()
             val newDescription = binding?.taskDescriptionEditText?.text.toString()
@@ -112,7 +123,6 @@ class DetalleTareaFragment : DialogFragment() {
             dismiss()
         }
 
-        val markAsCompletedButton = view.findViewById<Button>(R.id.markAsCompletedButton)
         markAsCompletedButton.setOnClickListener {
             mostrarAlertaConfirmacion()
         }

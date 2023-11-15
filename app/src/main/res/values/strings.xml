@@ -20,6 +20,9 @@
     <string name="descripci_n_detallada_de_la_tarea">Descripción detallada de la tarea...</string>
     <string name="marcar_como_completada">Marcar como Completada</string>
     <string name="editar_tarea">Editar Tarea</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navigation_drawer_open">Abrir cajón de navegación</string>
+    <string name="navigation_drawer_close">Cerrar cajón de navegación</string>
+    <string name="completed_tasks">Tareas Terminadas</string>
+    <string name="incompleted_tasks">Tareas Pendientes</string>
 </resources>

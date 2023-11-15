@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.taskwhiz.models.Task
 
 interface OnTaskClickListener {
-    fun onTaskClick(taskId: String)
+    fun onTaskClick(taskId: String, estatus: String)
 }
 
 class TaskAdapter(
@@ -30,7 +30,7 @@ class TaskAdapter(
             Log.d("TaskAdapter", "Item clicked at position $position")
             if (position != RecyclerView.NO_POSITION) {
                 val task = taskList[position]
-                onTaskClickListener.onTaskClick(task.id)
+                onTaskClickListener.onTaskClick(task.id, task.estatus)
             }
         }
     }

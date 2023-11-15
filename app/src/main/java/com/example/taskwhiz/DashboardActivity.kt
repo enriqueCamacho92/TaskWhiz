@@ -4,38 +4,45 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.taskwhiz.models.Task
+import com.google.android.material.navigation.NavigationView
 import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DashboardActivity : AppCompatActivity(), OnTaskClickListener {
+class DashboardActivity : AppCompatActivity(), OnTaskClickListener{
 
     private lateinit var addTaskButton: Button
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navView: NavigationView
+    private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         addTaskButton = findViewById(R.id.addTaskButton)
-
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        taskAdapter = TaskAdapter(ArrayList(),this)
 
-        // Configura la RecyclerView y el Adapter
         val taskRecyclerView: RecyclerView = findViewById(R.id.taskList)
-        val taskAdapter = TaskAdapter(ArrayList(),this) // Puedes pasar tu lista de tareas aquí
         taskRecyclerView.adapter = taskAdapter
         taskRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -44,9 +51,57 @@ class DashboardActivity : AppCompatActivity(), OnTaskClickListener {
         // Cargar tareas desde Firebase
         loadTasksFromFirebase(taskAdapter, "Pendiente")
 
-        // Configura un listener para el botón de agregar tarea
         addTaskButton.setOnClickListener {
             openCreateTaskFragment()
+        }
+        drawerLayout = findViewById(R.id.drawerLayout)
+        navView = findViewById(R.id.navView)
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+       // Configurar eventos de clic en elementos del menú
+        navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_completed_tasks -> {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    loadTasksFromFirebase(taskAdapter, "Terminado")
+                    updateToolbarTitle(getString(R.string.completed_tasks))
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.nav_incompleted_tasks -> {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    loadTasksFromFirebase(taskAdapter, "Pendiente")
+                    updateToolbarTitle(getString(R.string.incompleted_tasks))
+                    return@setNavigationItemSelectedListener true
+                }
+                // Agregar más casos según sea necesario
+                else -> false
+            }
+        }
+
+        val menuIcon = findViewById<ImageView>(R.id.menuIcon)
+        menuIcon.setOnClickListener {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -129,9 +184,9 @@ class DashboardActivity : AppCompatActivity(), OnTaskClickListener {
         }
     }
 
-    override fun onTaskClick(taskId: String) {
-        Log.d("OnTaskClickListener", "Task clicked: $taskId")
-        val fragment = DetalleTareaFragment.newInstance(taskId)
+    override fun onTaskClick(taskId: String, estatus: String) {
+        Log.d("OnTaskClickListener", "Task clicked: $taskId with status: $estatus\"")
+        val fragment = DetalleTareaFragment.newInstance(taskId,estatus)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
             .addToBackStack(null)

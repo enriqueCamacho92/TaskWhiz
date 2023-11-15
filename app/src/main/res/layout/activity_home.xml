@@ -1,75 +1,97 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Fondo de pantalla -->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/im_gen_de_fondo"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_dashboard" />
-
-    <!-- Barra superior -->
-    <LinearLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:orientation="horizontal">
-
-        <!-- Icono del menú -->
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/icono_del_men"
-            android:src="@drawable/ic_menu"
-            tools:ignore="ImageContrastCheck" />
-
-        <!-- Título de la pantalla -->
-        <TextView
-            android:id="@+id/tvToolbarTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp" />
-
-    </LinearLayout>
+    android:layout_height="match_parent"
+    tools:context=".DashboardActivity">
 
     <!-- Contenido principal -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
         android:orientation="vertical">
 
-        <!-- Botón para agregar tarea -->
-        <Button
-            android:id="@+id/addTaskButton"
+        <!-- Fondo de pantalla -->
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:text="@string/agregar_tarea" />
+            android:layout_height="match_parent"
+            android:contentDescription="@string/im_gen_de_fondo"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background_dashboard" />
 
-        <!-- Fragmento CreateTaskFragment -->
-        <FrameLayout
-            android:id="@+id/fragmentContainer"
+        <!-- Barra superior -->
+        <LinearLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:orientation="horizontal">
 
-        <!-- Lista de tareas -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/taskList"
+            <!-- Icono del menú -->
+            <ImageView
+                android:id="@+id/menuIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/icono_del_men"
+                android:src="@drawable/ic_menu"
+                tools:ignore="ImageContrastCheck" />
+
+            <!-- Título de la pantalla -->
+            <TextView
+                android:id="@+id/tvToolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <!-- Contenido principal -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:orientation="vertical">
+
+            <!-- Botón para agregar tarea -->
+            <Button
+                android:id="@+id/addTaskButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/agregar_tarea" />
+
+            <!-- Fragmento CreateTaskFragment -->
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp" />
+
+            <!-- Lista de tareas -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/taskList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Panel lateral (Drawer) -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
